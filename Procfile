@@ -1,1 +1,1 @@
-python khodjiprogsm_bot.py 
+web: python khodjiprogsm_bot.py 
