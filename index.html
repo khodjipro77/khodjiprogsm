@@ -13,7 +13,46 @@
   --accent:#00d4ff;--accent2:#7b2fff;
   --text:#e8e8f0;--muted:#6b6b80;--border:#2a2a3a
 }
-body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;font-size:16px}
+@media(min-width:768px){
+  body{font-size:20px}
+  .header{padding:1.4rem 4rem}
+  .logo{font-size:1.4rem;letter-spacing:3px}
+  .lang-btn{font-size:0.95rem;padding:8px 18px}
+  .hero{padding:4rem 4rem 2.5rem}
+  .hero-title{font-size:3.8rem}
+  .hero-sub{font-size:1.3rem}
+  .stats{max-width:960px;margin:0 auto 2.5rem}
+  .stat{padding:1.5rem 1rem}
+  .stat-num{font-size:2.2rem}
+  .stat-label{font-size:0.9rem;letter-spacing:2px}
+  .section{padding:0 4rem 2.5rem;max-width:960px;margin:0 auto}
+  .section-title{font-size:1rem;letter-spacing:4px}
+  .services{grid-template-columns:repeat(3,1fr);gap:20px}
+  .svc-card{padding:2rem}
+  .svc-icon{font-size:2.2rem;margin-bottom:12px}
+  .svc-name{font-size:1.3rem}
+  .svc-desc{font-size:1rem}
+  .svc-price{font-size:1rem;margin-top:10px}
+  .how{padding:0 4rem 2.5rem;max-width:960px;margin:0 auto}
+  .step-num{width:42px;height:42px;font-size:1rem}
+  .step-title{font-size:1.2rem}
+  .step-sub{font-size:1rem}
+  .order-form{padding:0 4rem 2.5rem;max-width:760px;margin:0 auto}
+  .form-title{font-size:1.4rem}
+  .form-label{font-size:1rem}
+  .form-input{font-size:1.1rem;padding:16px}
+  .pay-name{font-size:1.3rem}
+  .pay-sub{font-size:0.9rem}
+  .submit-btn{font-size:1.3rem;padding:18px;border-radius:12px}
+  .footer{padding:2.5rem}
+  .footer-brand{font-size:1.2rem;letter-spacing:3px}
+  .footer-sub{font-size:1rem}
+  .success-title{font-size:1.8rem}
+  .success-sub{font-size:1.1rem}
+  .order-id{font-size:1.1rem;padding:14px 22px}
+  .new-order-btn{font-size:1.2rem;padding:14px 32px}
+}
 
 /* Header */
 .header{padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(10px);z-index:100}
