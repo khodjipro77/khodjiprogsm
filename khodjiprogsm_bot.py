@@ -10,7 +10,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 # =============================================
 # SOZLAMALAR - shu yerlarni o'zgartiring
 # =============================================
-BOT_TOKEN = "8810469523:AAF_PBmN0ZUHlSugpspWc8jFq8cBnFFRNDU"
+BOT_TOKEN = "8810469523:AAF1ywU5RQHdpgUbSa5V4SkiAa2NNmjpi-Q"
 ADMIN_ID = 1856943653
 # =============================================
 
