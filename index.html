@@ -592,8 +592,8 @@ textarea.form-input{resize:none;height:80px}
 // ============================================
 // CONFIG — API KEY ni backend da saqlang!
 // ============================================
-const API_KEY = 'YOUR_API_KEY'; // Backend orqali ishlatiladi
-const BACKEND_URL = 'YOUR_BACKEND_URL'; // Python backend URL
+const API_KEY = ''; // Backend da saqlanadi
+const BACKEND_URL = 'https://khodjiprogsm.onrender.com'; // Python backend URL
 
 // ============================================
 // STATE
@@ -773,7 +773,23 @@ window.onload = function(){
   renderOrders();
   updateProfileUI();
   applyLang();
+  // API dan xizmatlarni yukla
+  loadServicesFromAPI();
 };
+
+async function loadServicesFromAPI(){
+  try {
+    const r = await fetch(BACKEND_URL + '/api/services');
+    const data = await r.json();
+    if(data.success && data.services && data.services.length > 0){
+      allServices = data.services;
+      renderServices();
+    }
+  } catch(e) {
+    // API ishlamasa sample data ishlatiladi
+    console.log('API offline, sample data ishlatilmoqda');
+  }
+}
 
 // ============================================
 // LANGUAGE
@@ -872,7 +888,7 @@ function selectPay(type){
   document.getElementById(type==='click'?'payClick':'payPayme').classList.add('selected');
 }
 
-function submitOrder(){
+async function submitOrder(){
   const imei = document.getElementById('imeiInput').value.trim();
   if(!imei){ showToast('IMEI kiriting!','error'); return; }
   if(!selectedPay){ showToast("To'lov usulini tanlang!",'error'); return; }
@@ -892,9 +908,30 @@ function submitOrder(){
   orders.unshift(order);
   localStorage.setItem('kpgsm_orders', JSON.stringify(orders));
 
+  // API ga yuborish
+  try {
+    const res = await fetch(BACKEND_URL + '/api/order', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        service_id: selectedService.id,
+        service_name: selectedService.name,
+        imei: imei,
+        note: document.getElementById('noteInput').value,
+        payment: selectedPay,
+        price: selectedService.price,
+        user_id: tg?.initDataUnsafe?.user?.id || 'web'
+      })
+    });
+    const result = await res.json();
+    if(result.success) orderId = result.order_id;
+  } catch(e) {
+    console.log('API offline');
+  }
+
   // Telegram ga yuborish
   if(tg){
-    tg.sendData(JSON.stringify({orderId, service:selectedService.name, imei, payment:selectedPay, price:selectedService.price}));
+    try { tg.sendData(JSON.stringify({orderId, service:selectedService.name, imei, payment:selectedPay, price:selectedService.price})); } catch(e){}
   }
 
   document.getElementById('orderIdDisplay').textContent = '🔖 '+orderId;
