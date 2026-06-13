@@ -3,231 +3,388 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KHODJIPROGSM - Professional GSM Service</title>
+<title>KHODJIPROGSM — Professional GSM Service</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;
-  --accent:#00d4ff;--accent2:#7b2fff;
-  --text:#e8e8f0;--muted:#a0a0b8;--border:#2a2a3a
+  --bg:#050508;
+  --surface:#0d0d14;
+  --surface2:#14141f;
+  --surface3:#1a1a28;
+  --accent:#6c47ff;
+  --accent2:#00e5ff;
+  --accent3:#ff2d78;
+  --text:#f0f0ff;
+  --muted:#6b6b90;
+  --border:#1e1e30;
+  --success:#00e5a0;
 }
-body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
 
-/* Header */
-.header{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(10px);z-index:100}
-.logo{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--accent);letter-spacing:2px;display:flex;align-items:center;gap:6px}
-.logo-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.4)}}
-.lang-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:20px;font-size:13px;cursor:pointer;font-family:'Rajdhani',sans-serif}
+/* NOISE OVERLAY */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
 
-/* Hero */
-.hero{padding:30px 20px 20px;text-align:center}
-.hero-title{font-size:30px;font-weight:700;line-height:1.1;margin-bottom:8px}
-.hero-title span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{color:var(--muted);font-size:15px;line-height:1.5;margin-bottom:20px}
+/* GLOW EFFECTS */
+.glow-orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(108,71,255,0.15),transparent 70%);top:-100px;right:-100px}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(0,229,255,0.08),transparent 70%);bottom:20%;left:-150px}
 
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:24px}
-.stat{background:var(--surface);padding:16px 8px;text-align:center}
-.stat-num{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent)}
-.stat-label{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+/* HEADER */
+.header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;background:rgba(5,5,8,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.04)}
+.logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:3px;display:flex;align-items:center;gap:10px}
+.logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.logo-text{background:linear-gradient(90deg,var(--text),var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header-right{display:flex;align-items:center;gap:10px}
+.lang-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:500;transition:all .2s}
+.lang-btn:hover{border-color:var(--accent);color:var(--text)}
+.balance-pill{background:rgba(108,71,255,0.1);border:1px solid rgba(108,71,255,0.3);color:var(--accent2);padding:6px 14px;border-radius:20px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;transition:all .2s}
+.balance-pill:hover{background:rgba(108,71,255,0.2)}
 
-/* Services */
-.section{padding:0 20px 24px}
-.section-title{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:3px;margin-bottom:14px;text-transform:uppercase}
-.services{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.svc-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:border-color 0.2s,transform 0.2s}
-.svc-card:hover,.svc-card:active{border-color:var(--accent);transform:translateY(-2px)}
-.svc-card.selected{border-color:var(--accent);background:rgba(0,212,255,0.05)}
-.svc-icon{font-size:22px;margin-bottom:8px}
-.svc-name{font-weight:600;font-size:14px;margin-bottom:4px}
-.svc-desc{font-size:13px;color:var(--muted);line-height:1.3}
-.svc-price{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent);margin-top:8px}
+/* NAV TABS */
+.nav-tabs{display:flex;gap:2px;padding:12px 20px 0;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:61px;z-index:99;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:10px 16px;font-size:12px;font-weight:600;letter-spacing:1px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;text-transform:uppercase}
+.nav-tab.active{color:var(--accent2);border-bottom-color:var(--accent2)}
+.nav-tab:hover{color:var(--text)}
 
-/* Order Form */
-.order-form{display:none;padding:0 20px 24px}
-.order-form.active{display:block}
-.form-title{font-size:18px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.back-btn{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 120px);position:relative;z-index:1}
+.page.active{display:block}
+
+/* ===== HOME PAGE ===== */
+.hero{padding:40px 20px 30px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(108,71,255,0.1);border:1px solid rgba(108,71,255,0.3);padding:6px 14px;border-radius:20px;font-size:11px;color:var(--accent2);letter-spacing:2px;margin-bottom:24px;font-family:'Space Mono',monospace}
+.pulse{width:6px;height:6px;background:var(--success);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,229,160,0.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(0,229,160,0)}}
+.hero-title{font-size:clamp(28px,8vw,52px);font-weight:700;line-height:1.05;margin-bottom:16px;letter-spacing:-1px}
+.hero-title .line1{display:block;color:var(--text)}
+.hero-title .line2{display:block;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:var(--muted);font-size:14px;line-height:1.6;max-width:340px;margin:0 auto 32px}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:32px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat-item{background:var(--bg);padding:16px 8px;text-align:center}
+.stat-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-lbl{font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-top:3px;text-transform:uppercase}
+
+/* SERVICE CATEGORIES */
+.section-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;padding:0 20px;margin-bottom:14px;text-transform:uppercase}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 20px;margin-bottom:28px}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent),var(--accent2));opacity:0;transition:opacity .25s}
+.cat-card:hover::before,.cat-card.active::before{opacity:.08}
+.cat-card:hover,.cat-card.active{border-color:var(--accent);transform:translateY(-2px)}
+.cat-icon{font-size:22px;margin-bottom:6px;position:relative;z-index:1}
+.cat-name{font-size:10px;font-weight:600;letter-spacing:.5px;color:var(--muted);position:relative;z-index:1;line-height:1.3}
+.cat-card.active .cat-name{color:var(--accent2)}
+.cat-count{font-family:'Space Mono',monospace;font-size:9px;color:var(--accent);position:relative;z-index:1;margin-top:3px}
+
+/* SERVICE LIST */
+.services-container{padding:0 20px;margin-bottom:28px}
+.service-search{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;margin-bottom:12px;transition:border-color .2s}
+.service-search:focus{border-color:var(--accent)}
+.service-search::placeholder{color:var(--muted)}
+.services-list{display:flex;flex-direction:column;gap:6px;max-height:400px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.svc-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;display:flex;justify-content:space-between;align-items:center}
+.svc-item:hover{border-color:var(--accent);background:var(--surface2)}
+.svc-info{}
+.svc-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.svc-time{font-size:11px;color:var(--muted)}
+.svc-price{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent2);text-align:right;white-space:nowrap;margin-left:10px}
+.svc-loading{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== ORDER FORM ===== */
+.order-form-page{padding:20px;display:none}
+.order-form-page.active{display:block}
+.back-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.back-btn{width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:16px;transition:all .2s}
+.back-btn:hover{border-color:var(--accent);color:var(--text)}
+.form-service-name{font-size:16px;font-weight:700}
+.form-service-price{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent2);margin-top:2px}
 .form-group{margin-bottom:16px}
-.form-label{font-size:13px;color:var(--muted);margin-bottom:6px;display:block;letter-spacing:1px;text-transform:uppercase}
-.form-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s}
+.form-label{display:block;font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase}
+.form-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:13px 14px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
 .form-input:focus{border-color:var(--accent)}
 .form-input::placeholder{color:var(--muted)}
 textarea.form-input{resize:none;height:80px}
 
-/* Payment */
-.pay-section{margin-bottom:16px}
-.pay-title{font-size:13px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
-.pay-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.pay-option{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:border-color 0.2s}
-.pay-option:hover,.pay-option.selected{border-color:var(--accent)}
-.pay-name{font-weight:700;font-size:18px;margin-bottom:2px}
-.pay-sub{font-size:13px;color:var(--muted)}
-.click-color{color:#1a73e8}
-.payme-color{color:#00c2ff}
+/* PAYMENT */
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.pay-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s}
+.pay-card:hover,.pay-card.selected{border-color:var(--accent)}
+.pay-card.selected{background:rgba(108,71,255,0.08)}
+.pay-logo{font-size:20px;margin-bottom:4px}
+.pay-name{font-weight:700;font-size:14px}
+.pay-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.click-c{color:#1a73e8}
+.payme-c{color:#00c2ff}
 
-/* Submit */
-.submit-btn{width:100%;padding:16px;background:var(--accent);color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;border:none;border-radius:10px;cursor:pointer;letter-spacing:1px;transition:opacity 0.2s;margin-top:8px}
-.submit-btn:hover{opacity:0.85}
+/* BALANCE WARNING */
+.balance-warning{background:rgba(255,45,120,0.08);border:1px solid rgba(255,45,120,0.3);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--accent3);display:none}
+.balance-warning.show{display:block}
 
-/* Success */
-.success{display:none;padding:40px 20px;text-align:center}
-.success.active{display:block}
-.success-icon{font-size:48px;margin-bottom:16px}
-.success-title{font-size:22px;font-weight:700;margin-bottom:8px;color:var(--accent)}
-.success-sub{color:var(--muted);font-size:15px;line-height:1.5;margin-bottom:24px}
-.order-id{font-family:'Space Mono',monospace;background:var(--surface);border:1px solid var(--border);padding:10px 16px;border-radius:8px;font-size:14px;color:var(--accent);display:inline-block;margin-bottom:24px}
-.new-order-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:12px 24px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;cursor:pointer;letter-spacing:1px}
+/* SUBMIT */
+.submit-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:12px;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;position:relative;overflow:hidden}
+.submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent2),var(--accent));opacity:0;transition:opacity .3s}
+.submit-btn:hover::before{opacity:1}
+.submit-btn span{position:relative;z-index:1}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* Steps */
-.steps{display:flex;flex-direction:column;gap:0;margin-bottom:24px}
-.step{display:flex;gap:12px;position:relative;padding-bottom:20px}
-.step:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;width:1px;height:calc(100% - 12px);background:var(--border)}
-.step-num{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);flex-shrink:0}
-.step-content{padding-top:6px}
-.step-title{font-weight:600;font-size:15px;margin-bottom:2px}
-.step-sub{font-size:13px;color:var(--muted);line-height:1.4}
+/* ===== SUCCESS ===== */
+.success-page{display:none;padding:40px 20px;text-align:center}
+.success-page.active{display:block}
+.success-anim{width:80px;height:80px;background:linear-gradient(135deg,rgba(0,229,160,0.2),rgba(0,229,255,0.2));border:2px solid var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 24px;animation:scaleIn .5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes scaleIn{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-size:22px;font-weight:700;margin-bottom:8px;color:var(--success)}
+.success-sub{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:24px}
+.order-chip{background:var(--surface);border:1px solid var(--border);padding:10px 18px;border-radius:8px;font-family:'Space Mono',monospace;font-size:12px;color:var(--accent2);display:inline-block;margin-bottom:24px}
+.new-order-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:12px 28px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;cursor:pointer;letter-spacing:.5px;transition:all .2s}
+.new-order-btn:hover{background:rgba(108,71,255,0.1)}
 
-/* Footer */
+/* ===== ADD FUNDS PAGE ===== */
+.funds-page{padding:20px}
+.page-title{font-size:18px;font-weight:700;margin-bottom:6px}
+.page-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.balance-card{background:linear-gradient(135deg,rgba(108,71,255,0.15),rgba(0,229,255,0.08));border:1px solid rgba(108,71,255,0.3);border-radius:16px;padding:24px;margin-bottom:24px;position:relative;overflow:hidden}
+.balance-card::after{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(108,71,255,0.3),transparent);border-radius:50%}
+.balance-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.balance-amount{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;background:linear-gradient(135deg,var(--accent2),var(--text));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.amount-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.amount-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:10px;font-family:'Space Mono',monospace;font-size:13px;cursor:pointer;transition:all .2s;text-align:center}
+.amount-btn:hover,.amount-btn.selected{border-color:var(--accent);background:rgba(108,71,255,0.1);color:var(--accent2)}
+.pay-methods{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.pay-method{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
+.pay-method:hover,.pay-method.selected{border-color:var(--accent)}
+.pay-method-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.pay-method-info{flex:1}
+.pay-method-name{font-weight:700;font-size:14px}
+.pay-method-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.pay-method-check{width:20px;height:20px;border:2px solid var(--border);border-radius:50%;transition:all .2s}
+.pay-method.selected .pay-method-check{border-color:var(--accent);background:var(--accent)}
+.topup-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:12px;cursor:pointer;letter-spacing:.5px}
+
+/* ===== ORDER HISTORY PAGE ===== */
+.history-page{padding:20px}
+.history-filters{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.history-filters::-webkit-scrollbar{display:none}
+.filter-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-size:11px;cursor:pointer;white-space:nowrap;font-weight:600;letter-spacing:.5px;transition:all .2s}
+.filter-btn.active{background:rgba(108,71,255,0.1);border-color:var(--accent);color:var(--accent2)}
+.order-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+.order-card:hover{border-color:var(--accent)}
+.order-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.order-id{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent2)}
+.order-status{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.status-pending{background:rgba(255,200,0,0.1);color:#ffc800;border:1px solid rgba(255,200,0,0.3)}
+.status-processing{background:rgba(0,229,255,0.1);color:var(--accent2);border:1px solid rgba(0,229,255,0.3)}
+.status-completed{background:rgba(0,229,160,0.1);color:var(--success);border:1px solid rgba(0,229,160,0.3)}
+.status-rejected{background:rgba(255,45,120,0.1);color:var(--accent3);border:1px solid rgba(255,45,120,0.3)}
+.order-svc{font-size:13px;font-weight:600;margin-bottom:4px}
+.order-imei{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)}
+.order-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.order-date{font-size:11px;color:var(--muted)}
+.order-price{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent2)}
+.empty-history{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:16px;opacity:.4}
+.empty-text{font-size:13px;line-height:1.6}
+
+/* ===== PROFILE / LOGIN ===== */
+.profile-page{padding:20px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.login-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.login-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.auth-tabs{display:flex;gap:0;margin-bottom:20px;background:var(--surface2);border-radius:10px;padding:3px}
+.auth-tab{flex:1;padding:8px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border-radius:8px;color:var(--muted);transition:all .2s}
+.auth-tab.active{background:var(--accent);color:#fff}
+.auth-form{display:none}
+.auth-form.active{display:block}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;margin-top:4px}
+.divider{text-align:center;color:var(--muted);font-size:11px;margin:16px 0;position:relative}
+.divider::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:var(--border)}
+.divider span{background:var(--surface);padding:0 12px;position:relative}
+
+/* PROFILE INFO */
+.profile-info{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;display:none}
+.profile-info.show{display:block}
+.profile-avatar{width:60px;height:60px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
+.profile-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.profile-email{font-size:12px;color:var(--muted);margin-bottom:14px}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.profile-stat{background:var(--surface2);border-radius:10px;padding:12px}
+.profile-stat-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent2)}
+.profile-stat-lbl{font-size:10px;color:var(--muted);margin-top:3px}
+.logout-btn{width:100%;padding:12px;background:rgba(255,45,120,0.1);border:1px solid rgba(255,45,120,0.3);color:var(--accent3);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;border-radius:10px;cursor:pointer;margin-top:12px;display:none}
+.logout-btn.show{display:block}
+
+/* HOW IT WORKS */
+.how-section{padding:0 20px 32px}
+.steps-list{display:flex;flex-direction:column;gap:0}
+.step-item{display:flex;gap:14px;padding-bottom:20px;position:relative}
+.step-item:not(:last-child)::after{content:'';position:absolute;left:17px;top:36px;width:1px;height:calc(100% - 20px);background:linear-gradient(to bottom,var(--accent),transparent)}
+.step-num{width:36px;height:36px;border-radius:50%;border:1px solid var(--accent);background:rgba(108,71,255,0.1);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);flex-shrink:0}
+.step-body{padding-top:8px}
+.step-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* FOOTER */
 .footer{padding:24px 20px;border-top:1px solid var(--border);text-align:center}
-.footer-brand{font-family:'Space Mono',monospace;font-size:14px;color:var(--accent);letter-spacing:2px}
-.footer-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.footer-brand{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:3px}
+.footer-sub{font-size:11px;color:var(--muted);margin-top:6px}
+.footer-links{display:flex;justify-content:center;gap:16px;margin-top:12px}
+.footer-link{font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-link:hover{color:var(--accent2)}
 
-/* DESKTOP */
+/* NOTIFICATIONS */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface3);border:1px solid var(--border);padding:12px 20px;border-radius:10px;font-size:13px;z-index:999;transition:transform .3s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:var(--success);color:var(--success)}
+.toast.error{border-color:var(--accent3);color:var(--accent3)}
+
 @media(min-width:768px){
-  .header{padding:20px 80px}
-  .logo{font-size:18px}
-  .lang-btn{font-size:15px;padding:8px 20px}
-  .hero{padding:60px 80px 40px}
-  .hero-title{font-size:48px}
-  .hero-sub{font-size:18px}
-  .stats{max-width:1100px;margin:0 auto 40px}
-  .stat{padding:24px 20px}
-  .stat-num{font-size:34px}
-  .stat-label{font-size:13px}
-  .section{padding:0 80px 40px;max-width:1100px;margin:0 auto}
-  .section-title{font-size:14px;margin-bottom:20px}
-  .services{grid-template-columns:repeat(3,1fr);gap:20px}
-  .svc-card{padding:28px}
-  .svc-icon{font-size:36px;margin-bottom:14px}
-  .svc-name{font-size:19px}
-  .svc-desc{font-size:15px}
-  .svc-price{font-size:15px;margin-top:12px}
-  .step-num{width:44px;height:44px;font-size:15px}
-  .step-title{font-size:19px}
-  .step-sub{font-size:16px}
-  .order-form{padding:0 80px 40px;max-width:800px;margin:0 auto}
-  .form-title{font-size:26px}
-  .form-label{font-size:14px}
-  .form-input{font-size:18px;padding:16px}
-  .pay-name{font-size:24px}
-  .pay-sub{font-size:14px}
-  .submit-btn{font-size:22px;padding:20px}
-  .footer{padding:40px}
-  .footer-brand{font-size:18px}
-  .footer-sub{font-size:14px}
-  .success-title{font-size:30px}
-  .success-sub{font-size:18px}
+  .hero{padding:60px 40px 40px}
+  .hero-title{font-size:64px}
+  .cat-grid{grid-template-columns:repeat(6,1fr);padding:0 40px}
+  .services-container{padding:0 40px}
+  .section-label{padding:0 40px}
+  .how-section{padding:0 40px 40px}
+  .stats-row .stat-val{font-size:22px}
 }
 </style>
 </head>
 <body>
+<div class="glow-orb orb1"></div>
+<div class="glow-orb orb2"></div>
 
+<!-- HEADER -->
 <div class="header">
   <div class="logo">
-    <div class="logo-dot"></div>
-    KHODJIPROGSM
+    <div class="logo-icon">⚡</div>
+    <span class="logo-text">KHODJIPROGSM</span>
   </div>
-  <button class="lang-btn" onclick="changeLang()">🇺🇿 UZ</button>
+  <div class="header-right">
+    <div class="balance-pill" onclick="showPage('funds')" id="balancePill">$ 0.00</div>
+    <button class="lang-btn" onclick="changeLang()">🇺🇿 UZ</button>
+  </div>
 </div>
 
-<div id="mainPage">
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showPage('home')" data-page="home" id="tab-home">
+    <span data-key="nav_services">Xizmatlar</span>
+  </div>
+  <div class="nav-tab" onclick="showPage('funds')" data-page="funds" id="tab-funds">
+    <span data-key="nav_funds">Balans</span>
+  </div>
+  <div class="nav-tab" onclick="showPage('history')" data-page="history" id="tab-history">
+    <span data-key="nav_history">Buyurtmalar</span>
+  </div>
+  <div class="nav-tab" onclick="showPage('profile')" data-page="profile" id="tab-profile">
+    <span data-key="nav_profile">Profil</span>
+  </div>
+</div>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
   <div class="hero">
-    <h1 class="hero-title">Professional<br><span>GSM Service</span></h1>
-    <p class="hero-sub" id="heroSub">iCloud · FRP · MDM · Network Unlock · Firmware</p>
+    <div class="hero-badge">
+      <div class="pulse"></div>
+      <span data-key="badge">ONLINE 24/7</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="line1" data-key="hero1">Professional</span>
+      <span class="line2" data-key="hero2">GSM Service</span>
+    </h1>
+    <p class="hero-sub" data-key="hero_sub">iCloud · FRP · MDM · Network Unlock · IMEI Check · Remote Tools</p>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">SUPPORT</div></div>
-    <div class="stat"><div class="stat-num">99%</div><div class="stat-label">SUCCESS</div></div>
-    <div class="stat"><div class="stat-num">1-10</div><div class="stat-label">MINUTES</div></div>
-    <div class="stat"><div class="stat-num">500+</div><div class="stat-label">SERVICES</div></div>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-val">24/7</div><div class="stat-lbl" data-key="stat1">Support</div></div>
+    <div class="stat-item"><div class="stat-val">99%</div><div class="stat-lbl" data-key="stat2">Success</div></div>
+    <div class="stat-item"><div class="stat-val">500+</div><div class="stat-lbl" data-key="stat3">Services</div></div>
+    <div class="stat-item"><div class="stat-val">Fast</div><div class="stat-lbl" data-key="stat4">Delivery</div></div>
   </div>
 
-  <div class="section">
-    <div class="section-title" id="svcTitle">// Xizmatlar</div>
-    <div class="services" id="servicesGrid">
-      <div class="svc-card" onclick="selectService('icloud','🍎 iCloud Unlock','IMEI raqamingizni kiriting (15 raqam)','$4.99 dan')">
-        <div class="svc-icon">🍎</div>
-        <div class="svc-name">iCloud Unlock</div>
-        <div class="svc-desc">iPhone/iPad barcha modellari</div>
-        <div class="svc-price">from $4.99</div>
-      </div>
-      <div class="svc-card" onclick="selectService('frp','🔓 Samsung FRP','IMEI raqamingizni kiriting','$0.50 dan')">
-        <div class="svc-icon">🔓</div>
-        <div class="svc-name">Samsung FRP</div>
-        <div class="svc-desc">Android 13, 14, 15</div>
-        <div class="svc-price">from $0.50</div>
-      </div>
-      <div class="svc-card" onclick="selectService('mdm','🛡️ MDM Bypass','IMEI va model nomini kiriting','$9.99 dan')">
-        <div class="svc-icon">🛡️</div>
-        <div class="svc-name">MDM Bypass</div>
-        <div class="svc-desc">Korporativ qurilmalar</div>
-        <div class="svc-price">from $9.99</div>
-      </div>
-      <div class="svc-card" onclick="selectService('network','📡 Network Unlock','IMEI va operator nomini kiriting','$1.99 dan')">
-        <div class="svc-icon">📡</div>
-        <div class="svc-name">Network Unlock</div>
-        <div class="svc-desc">Barcha operatorlar</div>
-        <div class="svc-price">from $1.99</div>
-      </div>
-      <div class="svc-card" onclick="selectService('firmware','⚡ Firmware','Model va muammoni yozing','$2.99 dan')">
-        <div class="svc-icon">⚡</div>
-        <div class="svc-name">Firmware</div>
-        <div class="svc-desc">Flash, repair, restore</div>
-        <div class="svc-price">from $2.99</div>
-      </div>
-      <div class="svc-card" onclick="selectService('imei','🔍 IMEI Check','IMEI raqamingizni kiriting','$0.10 dan')">
-        <div class="svc-icon">🔍</div>
-        <div class="svc-name">IMEI Check</div>
-        <div class="svc-desc">Blacklist, warranty tekshiruv</div>
-        <div class="svc-price">from $0.10</div>
+  <!-- CATEGORIES -->
+  <div class="section-label" data-key="cat_label">// Kategoriyalar</div>
+  <div class="cat-grid" id="catGrid">
+    <div class="cat-card active" onclick="selectCat('imei',this)">
+      <div class="cat-icon">📱</div>
+      <div class="cat-name">IMEI</div>
+      <div class="cat-count">Service</div>
+    </div>
+    <div class="cat-card" onclick="selectCat('server',this)">
+      <div class="cat-icon">🖥️</div>
+      <div class="cat-name">Server</div>
+      <div class="cat-count">Service</div>
+    </div>
+    <div class="cat-card" onclick="selectCat('remote',this)">
+      <div class="cat-icon">🔧</div>
+      <div class="cat-name">Remote</div>
+      <div class="cat-count">& Tools</div>
+    </div>
+    <div class="cat-card" onclick="selectCat('icloud',this)">
+      <div class="cat-icon">☁️</div>
+      <div class="cat-name">iCloud</div>
+      <div class="cat-count">Unlock</div>
+    </div>
+    <div class="cat-card" onclick="selectCat('frp',this)">
+      <div class="cat-icon">🔓</div>
+      <div class="cat-name">FRP</div>
+      <div class="cat-count">Bypass</div>
+    </div>
+    <div class="cat-card" onclick="selectCat('check',this)">
+      <div class="cat-icon">🔍</div>
+      <div class="cat-name">IMEI</div>
+      <div class="cat-count">Check</div>
+    </div>
+  </div>
+
+  <!-- SERVICES LIST -->
+  <div class="services-container">
+    <div class="section-label" style="padding:0;margin-bottom:10px" data-key="svc_label">// Xizmatlar</div>
+    <input type="text" class="service-search" id="searchInput" placeholder="Xizmat qidirish..." oninput="filterServices()">
+    <div class="services-list" id="servicesList">
+      <div class="svc-loading">
+        <div class="spinner"></div>
+        <div data-key="loading">Xizmatlar yuklanmoqda...</div>
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-title">// Qanday ishlaydi</div>
-    <div class="steps">
-      <div class="step">
+  <!-- HOW IT WORKS -->
+  <div class="section-label" data-key="how_label">// Qanday ishlaydi</div>
+  <div class="how-section">
+    <div class="steps-list">
+      <div class="step-item">
         <div class="step-num">01</div>
-        <div class="step-content">
-          <div class="step-title">Xizmat tanlang</div>
-          <div class="step-sub">Kerakli xizmatni bosing</div>
+        <div class="step-body">
+          <div class="step-title" data-key="step1_title">Xizmat tanlang</div>
+          <div class="step-desc" data-key="step1_desc">Kerakli xizmatni topib bosing</div>
         </div>
       </div>
-      <div class="step">
+      <div class="step-item">
         <div class="step-num">02</div>
-        <div class="step-content">
-          <div class="step-title">Ma'lumot kiriting</div>
-          <div class="step-sub">IMEI yoki qurilma ma'lumotlari</div>
+        <div class="step-body">
+          <div class="step-title" data-key="step2_title">IMEI kiriting</div>
+          <div class="step-desc" data-key="step2_desc">Qurilma ma'lumotlarini to'ldiring</div>
         </div>
       </div>
-      <div class="step">
+      <div class="step-item">
         <div class="step-num">03</div>
-        <div class="step-content">
-          <div class="step-title">To'lov qiling</div>
-          <div class="step-sub">Click yoki Payme orqali</div>
+        <div class="step-body">
+          <div class="step-title" data-key="step3_title">To'lov qiling</div>
+          <div class="step-desc" data-key="step3_desc">Click yoki Payme orqali</div>
         </div>
       </div>
-      <div class="step">
+      <div class="step-item">
         <div class="step-num">04</div>
-        <div class="step-content">
-          <div class="step-title">Natija oling</div>
-          <div class="step-sub">1-10 daqiqada tayyor!</div>
+        <div class="step-body">
+          <div class="step-title" data-key="step4_title">Natija oling</div>
+          <div class="step-desc" data-key="step4_desc">Belgilangan vaqtda tayyor!</div>
         </div>
       </div>
     </div>
@@ -236,100 +393,662 @@ textarea.form-input{resize:none;height:80px}
   <div class="footer">
     <div class="footer-brand">KHODJIPROGSM</div>
     <div class="footer-sub">Professional GSM Service · Toshkent, O'zbekiston</div>
+    <div class="footer-links">
+      <a href="https://t.me/khodjipro" class="footer-link">Telegram</a>
+      <a href="#" class="footer-link" data-key="footer_support">Yordam</a>
+    </div>
   </div>
 </div>
 
-<div class="order-form" id="orderForm">
-  <div class="form-title">
-    <button class="back-btn" onclick="goBack()">←</button>
-    <span id="formTitle">Buyurtma</span>
-  </div>
-  <div class="form-group">
-    <label class="form-label" id="imeiLabel">IMEI / Ma'lumot</label>
-    <input type="text" class="form-input" id="imeiInput" placeholder="IMEI yoki ma'lumot kiriting">
-  </div>
-  <div class="form-group">
-    <label class="form-label">Izoh (ixtiyoriy)</label>
-    <textarea class="form-input" id="noteInput" placeholder="Qo'shimcha ma'lumot..."></textarea>
-  </div>
-  <div class="pay-section">
-    <div class="pay-title">To'lov usuli</div>
-    <div class="pay-options">
-      <div class="pay-option" id="payClick" onclick="selectPay('click')">
-        <div class="pay-name click-color">Click</div>
-        <div class="pay-sub">O'zbekiston</div>
+<!-- ===== ORDER FORM ===== -->
+<div class="page" id="page-order">
+  <div class="order-form-page active">
+    <div class="back-header">
+      <div class="back-btn" onclick="showPage('home')">←</div>
+      <div>
+        <div class="form-service-name" id="formSvcName">Xizmat</div>
+        <div class="form-service-price" id="formSvcPrice"></div>
       </div>
-      <div class="pay-option" id="payPayme" onclick="selectPay('payme')">
-        <div class="pay-name payme-color">Payme</div>
-        <div class="pay-sub">Tez va xavfsiz</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" id="imeiLabel" data-key="imei_label">IMEI / Ma'lumot</label>
+      <input type="text" class="form-input" id="imeiInput" placeholder="015XXXXXXXXXXXX">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" data-key="note_label">Izoh (ixtiyoriy)</label>
+      <textarea class="form-input" id="noteInput" placeholder="Qo'shimcha ma'lumot..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" data-key="pay_label">To'lov usuli</label>
+      <div class="pay-grid">
+        <div class="pay-card" id="payClick" onclick="selectPay('click')">
+          <div class="pay-logo">💳</div>
+          <div class="pay-name click-c">Click</div>
+          <div class="pay-sub">O'zbekiston</div>
+        </div>
+        <div class="pay-card" id="payPayme" onclick="selectPay('payme')">
+          <div class="pay-logo">💳</div>
+          <div class="pay-name payme-c">Payme</div>
+          <div class="pay-sub">Tez va xavfsiz</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="balance-warning" id="balanceWarn">
+      ⚠️ Balansingiz yetarli emas. <span onclick="showPage('funds')" style="text-decoration:underline;cursor:pointer">Balans to'ldiring →</span>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="submitOrder()">
+      <span data-key="order_btn">Buyurtma berish →</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== SUCCESS ===== -->
+<div class="page" id="page-success">
+  <div class="success-page active">
+    <div class="success-anim">✅</div>
+    <div class="success-title" data-key="success_title">Buyurtma qabul qilindi!</div>
+    <div class="success-sub" data-key="success_sub">Admin tasdiqlashini kuting.<br>Belgilangan vaqtda natija yuboriladi.</div>
+    <div class="order-chip" id="orderIdDisplay"></div>
+    <br><br>
+    <button class="new-order-btn" onclick="showPage('home')" data-key="new_order">Yangi buyurtma</button>
+  </div>
+</div>
+
+<!-- ===== ADD FUNDS ===== -->
+<div class="page" id="page-funds">
+  <div class="funds-page">
+    <div class="page-title" data-key="funds_title">Balans to'ldirish</div>
+    <div class="page-sub" data-key="funds_sub">Qulay to'lov usulini tanlang</div>
+
+    <div class="balance-card">
+      <div class="balance-label" data-key="balance_label">Joriy balans</div>
+      <div class="balance-amount" id="currentBalance">$ 0.00</div>
+    </div>
+
+    <div class="section-label" style="padding:0;margin-bottom:10px" data-key="amount_label">// Summa tanlang</div>
+    <div class="amount-grid" id="amountGrid">
+      <div class="amount-btn" onclick="selectAmount(5,this)">$5</div>
+      <div class="amount-btn" onclick="selectAmount(10,this)">$10</div>
+      <div class="amount-btn" onclick="selectAmount(20,this)">$20</div>
+      <div class="amount-btn" onclick="selectAmount(50,this)">$50</div>
+      <div class="amount-btn" onclick="selectAmount(100,this)">$100</div>
+      <div class="amount-btn" onclick="selectAmount(0,this)" id="customAmountBtn">Custom</div>
+    </div>
+    <input type="number" class="form-input" id="customAmount" placeholder="Miqdor kiriting ($)" style="margin-bottom:20px;display:none">
+
+    <div class="section-label" style="padding:0;margin-bottom:10px" data-key="pay_method_label">// To'lov usuli</div>
+    <div class="pay-methods">
+      <div class="pay-method" onclick="selectPayMethod('click',this)">
+        <div class="pay-method-icon" style="background:rgba(26,115,232,0.1)">💳</div>
+        <div class="pay-method-info">
+          <div class="pay-method-name click-c">Click</div>
+          <div class="pay-method-desc">Tezkor to'lov</div>
+        </div>
+        <div class="pay-method-check" id="check-click"></div>
+      </div>
+      <div class="pay-method" onclick="selectPayMethod('payme',this)">
+        <div class="pay-method-icon" style="background:rgba(0,194,255,0.1)">💳</div>
+        <div class="pay-method-info">
+          <div class="pay-method-name payme-c">Payme</div>
+          <div class="pay-method-desc">Xavfsiz va tez</div>
+        </div>
+        <div class="pay-method-check" id="check-payme"></div>
+      </div>
+    </div>
+
+    <button class="topup-btn" onclick="processTopup()" data-key="topup_btn">Balans to'ldirish →</button>
+  </div>
+</div>
+
+<!-- ===== ORDER HISTORY ===== -->
+<div class="page" id="page-history">
+  <div class="history-page">
+    <div class="page-title" data-key="history_title">Buyurtmalar tarixi</div>
+    <div class="history-filters">
+      <div class="filter-btn active" onclick="filterOrders('all',this)" data-key="filter_all">Barchasi</div>
+      <div class="filter-btn" onclick="filterOrders('pending',this)" data-key="filter_pending">Kutilmoqda</div>
+      <div class="filter-btn" onclick="filterOrders('processing',this)" data-key="filter_processing">Jarayonda</div>
+      <div class="filter-btn" onclick="filterOrders('completed',this)" data-key="filter_done">Bajarildi</div>
+      <div class="filter-btn" onclick="filterOrders('rejected',this)" data-key="filter_rejected">Rad etildi</div>
+    </div>
+    <div id="ordersList"></div>
+  </div>
+</div>
+
+<!-- ===== PROFILE ===== -->
+<div class="page" id="page-profile">
+  <div class="profile-page">
+
+    <!-- Profile info (when logged in) -->
+    <div class="profile-info" id="profileInfo">
+      <div class="profile-avatar">👤</div>
+      <div class="profile-name" id="profileName">Foydalanuvchi</div>
+      <div class="profile-email" id="profileEmail">email@example.com</div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-val" id="profileOrders">0</div>
+          <div class="profile-stat-lbl" data-key="profile_orders">Buyurtmalar</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-val" id="profileBalance">$0</div>
+          <div class="profile-stat-lbl" data-key="profile_balance">Balans</div>
+        </div>
+      </div>
+      <button class="logout-btn show" onclick="logout()" data-key="logout_btn">Chiqish</button>
+    </div>
+
+    <!-- Login/Register form -->
+    <div class="login-card" id="loginCard">
+      <div class="login-title" data-key="login_title">Kirish / Ro'yxatdan o'tish</div>
+      <div class="login-sub" data-key="login_sub">Buyurtma tarixingizni ko'rish uchun kiring</div>
+      
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchAuth('login',this)" data-key="login_tab">Kirish</div>
+        <div class="auth-tab" onclick="switchAuth('register',this)" data-key="register_tab">Ro'yxat</div>
+      </div>
+
+      <!-- Login -->
+      <div class="auth-form active" id="form-login">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-key="password_label">Parol</label>
+          <input type="password" class="form-input" id="loginPass" placeholder="••••••••">
+        </div>
+        <button class="login-btn" onclick="doLogin()" data-key="login_btn">Kirish →</button>
+      </div>
+
+      <!-- Register -->
+      <div class="auth-form" id="form-register">
+        <div class="form-group">
+          <label class="form-label" data-key="name_label">Ism</label>
+          <input type="text" class="form-input" id="regName" placeholder="Ismingiz">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="regEmail" placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-key="password_label">Parol</label>
+          <input type="password" class="form-input" id="regPass" placeholder="••••••••">
+        </div>
+        <button class="login-btn" onclick="doRegister()" data-key="register_btn">Ro'yxatdan o'tish →</button>
       </div>
     </div>
   </div>
-  <button class="submit-btn" onclick="submitOrder()">Buyurtma berish →</button>
 </div>
 
-<div class="success" id="successPage">
-  <div class="success-icon">✅</div>
-  <div class="success-title">Buyurtma qabul qilindi!</div>
-  <div class="success-sub">Admin tasdiqlashini kuting.<br>1-30 daqiqa ichida javob olasiz.</div>
-  <div class="order-id" id="orderIdDisplay"></div>
-  <br>
-  <button class="new-order-btn" onclick="newOrder()">Yangi buyurtma</button>
-</div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
-const tg=window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();}
-let selectedService=null,selectedPay=null,currentLang='uz';
-const langs={
-  uz:{svcTitle:'// Xizmatlar',heroSub:'iCloud · FRP · MDM · Network Unlock · Firmware'},
-  ru:{svcTitle:'// Услуги',heroSub:'iCloud · FRP · MDM · Разблокировка · Прошивка'},
-  en:{svcTitle:'// Services',heroSub:'iCloud · FRP · MDM · Network Unlock · Firmware'}
+// ============================================
+// CONFIG — API KEY ni backend da saqlang!
+// ============================================
+const API_KEY = 'YOUR_API_KEY'; // Backend orqali ishlatiladi
+const BACKEND_URL = 'YOUR_BACKEND_URL'; // Python backend URL
+
+// ============================================
+// STATE
+// ============================================
+const tg = window.Telegram?.WebApp;
+if(tg){ tg.ready(); tg.expand(); }
+
+let currentLang = 'uz';
+let selectedService = null;
+let selectedPay = null;
+let selectedPayMethod = null;
+let selectedAmount = 0;
+let currentFilter = 'all';
+let allServices = [];
+let currentCat = 'imei';
+let currentUser = JSON.parse(localStorage.getItem('kpgsm_user') || 'null');
+let userBalance = parseFloat(localStorage.getItem('kpgsm_balance') || '0');
+let orders = JSON.parse(localStorage.getItem('kpgsm_orders') || '[]');
+
+// ============================================
+// TRANSLATIONS
+// ============================================
+const T = {
+  uz: {
+    nav_services:'Xizmatlar', nav_funds:'Balans', nav_history:'Buyurtmalar', nav_profile:'Profil',
+    badge:'ONLINE 24/7', hero1:'Professional', hero2:'GSM Service',
+    hero_sub:'iCloud · FRP · MDM · Network Unlock · IMEI Check · Remote Tools',
+    stat1:'Yordam', stat2:'Muvaffaqiyat', stat3:'Xizmatlar', stat4:'Tezkor',
+    cat_label:'// Kategoriyalar', svc_label:'// Xizmatlar', how_label:'// Qanday ishlaydi',
+    loading:'Xizmatlar yuklanmoqda...',
+    step1_title:'Xizmat tanlang', step1_desc:'Kerakli xizmatni topib bosing',
+    step2_title:'IMEI kiriting', step2_desc:"Qurilma ma'lumotlarini to'ldiring",
+    step3_title:"To'lov qiling", step3_desc:'Click yoki Payme orqali',
+    step4_title:'Natija oling', step4_desc:'Belgilangan vaqtda tayyor!',
+    imei_label:"IMEI / Ma'lumot", note_label:'Izoh (ixtiyoriy)', pay_label:"To'lov usuli",
+    order_btn:'Buyurtma berish →',
+    success_title:'Buyurtma qabul qilindi!', success_sub:"Admin tasdiqlashini kuting.\nBelgilangan vaqtda natija yuboriladi.",
+    new_order:'Yangi buyurtma',
+    funds_title:"Balans to'ldirish", funds_sub:"Qulay to'lov usulini tanlang",
+    balance_label:'Joriy balans', amount_label:'// Summa tanlang',
+    pay_method_label:"// To'lov usuli", topup_btn:"Balans to'ldirish →",
+    history_title:'Buyurtmalar tarixi',
+    filter_all:'Barchasi', filter_pending:'Kutilmoqda', filter_processing:'Jarayonda',
+    filter_done:'Bajarildi', filter_rejected:'Rad etildi',
+    login_title:"Kirish / Ro'yxatdan o'tish", login_sub:"Buyurtma tarixingizni ko'rish uchun kiring",
+    login_tab:'Kirish', register_tab:"Ro'yxat", password_label:'Parol', name_label:'Ism',
+    login_btn:'Kirish →', register_btn:"Ro'yxatdan o'tish →",
+    profile_orders:'Buyurtmalar', profile_balance:'Balans', logout_btn:'Chiqish',
+    footer_support:'Yordam',
+    search_placeholder:'Xizmat qidirish...',
+  },
+  ru: {
+    nav_services:'Услуги', nav_funds:'Баланс', nav_history:'Заказы', nav_profile:'Профиль',
+    badge:'ОНЛАЙН 24/7', hero1:'Профессиональный', hero2:'GSM Сервис',
+    hero_sub:'iCloud · FRP · MDM · Разблокировка · IMEI Проверка · Инструменты',
+    stat1:'Поддержка', stat2:'Успех', stat3:'Услуги', stat4:'Быстро',
+    cat_label:'// Категории', svc_label:'// Услуги', how_label:'// Как это работает',
+    loading:'Загрузка услуг...',
+    step1_title:'Выберите услугу', step1_desc:'Найдите и нажмите на нужную услугу',
+    step2_title:'Введите IMEI', step2_desc:'Заполните данные устройства',
+    step3_title:'Оплатите', step3_desc:'Через Click или Payme',
+    step4_title:'Получите результат', step4_desc:'В указанное время готово!',
+    imei_label:'IMEI / Данные', note_label:'Комментарий (необязательно)', pay_label:'Способ оплаты',
+    order_btn:'Оформить заказ →',
+    success_title:'Заказ принят!', success_sub:'Ожидайте подтверждения.\nРезультат придёт в указанное время.',
+    new_order:'Новый заказ',
+    funds_title:'Пополнение баланса', funds_sub:'Выберите удобный способ оплаты',
+    balance_label:'Текущий баланс', amount_label:'// Выберите сумму',
+    pay_method_label:'// Способ оплаты', topup_btn:'Пополнить баланс →',
+    history_title:'История заказов',
+    filter_all:'Все', filter_pending:'Ожидание', filter_processing:'В процессе',
+    filter_done:'Выполнено', filter_rejected:'Отклонено',
+    login_title:'Вход / Регистрация', login_sub:'Войдите чтобы видеть историю заказов',
+    login_tab:'Вход', register_tab:'Регистрация', password_label:'Пароль', name_label:'Имя',
+    login_btn:'Войти →', register_btn:'Зарегистрироваться →',
+    profile_orders:'Заказы', profile_balance:'Баланс', logout_btn:'Выйти',
+    footer_support:'Поддержка',
+    search_placeholder:'Поиск услуги...',
+  },
+  en: {
+    nav_services:'Services', nav_funds:'Balance', nav_history:'Orders', nav_profile:'Profile',
+    badge:'ONLINE 24/7', hero1:'Professional', hero2:'GSM Service',
+    hero_sub:'iCloud · FRP · MDM · Network Unlock · IMEI Check · Remote Tools',
+    stat1:'Support', stat2:'Success', stat3:'Services', stat4:'Fast',
+    cat_label:'// Categories', svc_label:'// Services', how_label:'// How it works',
+    loading:'Loading services...',
+    step1_title:'Select Service', step1_desc:'Find and tap the needed service',
+    step2_title:'Enter IMEI', step2_desc:'Fill in device information',
+    step3_title:'Pay', step3_desc:'Via Click or Payme',
+    step4_title:'Get Result', step4_desc:'Ready in specified time!',
+    imei_label:'IMEI / Data', note_label:'Comment (optional)', pay_label:'Payment method',
+    order_btn:'Place Order →',
+    success_title:'Order Accepted!', success_sub:'Wait for admin confirmation.\nResult will be sent in specified time.',
+    new_order:'New Order',
+    funds_title:'Add Funds', funds_sub:'Choose a convenient payment method',
+    balance_label:'Current Balance', amount_label:'// Select Amount',
+    pay_method_label:'// Payment Method', topup_btn:'Add Funds →',
+    history_title:'Order History',
+    filter_all:'All', filter_pending:'Pending', filter_processing:'Processing',
+    filter_done:'Completed', filter_rejected:'Rejected',
+    login_title:'Login / Register', login_sub:'Sign in to view your order history',
+    login_tab:'Login', register_tab:'Register', password_label:'Password', name_label:'Name',
+    login_btn:'Login →', register_btn:'Register →',
+    profile_orders:'Orders', profile_balance:'Balance', logout_btn:'Logout',
+    footer_support:'Support',
+    search_placeholder:'Search service...',
+  }
 };
+
+// ============================================
+// SAMPLE SERVICES (API ulanguncha)
+// ============================================
+const SAMPLE_SERVICES = [
+  // IMEI
+  {id:1, cat:'imei', name:'iCloud Unlock UK/Europe iPhone 11-13', time:'5-20 days', price:'$150', group:'iCloud Remove'},
+  {id:2, cat:'imei', name:'iCloud Unlock UK/Europe iPhone 14', time:'5-20 days', price:'$160', group:'iCloud Remove'},
+  {id:3, cat:'imei', name:'iCloud Unlock UK/Europe iPhone 15', time:'5-20 days', price:'$180', group:'iCloud Remove'},
+  {id:4, cat:'imei', name:'iCloud Unlock UK/Europe iPhone 16', time:'5-20 days', price:'$190', group:'iCloud Remove'},
+  {id:5, cat:'imei', name:'Samsung FRP By IMEI - Low Devices', time:'1-5 min', price:'$13', group:'Samsung FRP'},
+  {id:6, cat:'imei', name:'Samsung FRP Android 11/12/13/14', time:'1-5 min', price:'$17.2', group:'Samsung FRP'},
+  {id:7, cat:'imei', name:'Apple IMEI Check - FMI ON/OFF', time:'1-5 min', price:'$0.03', group:'IMEI Check'},
+  {id:8, cat:'imei', name:'Apple SimLock + Carrier Check', time:'Instant', price:'$0.05', group:'IMEI Check'},
+  {id:9, cat:'imei', name:'Blacklist Check Worldwide', time:'1-5 min', price:'$0.05', group:'IMEI Check'},
+  {id:10, cat:'imei', name:'Apple GSX Full Info Check', time:'1-5 min', price:'$1.9', group:'IMEI Check'},
+  {id:11, cat:'imei', name:'Xiaomi Mi Account Remove - Uzbekistan', time:'1-24h', price:'$10', group:'Xiaomi'},
+  {id:12, cat:'imei', name:'Xiaomi Mi Account Remove - Russia', time:'1-3h', price:'$12', group:'Xiaomi'},
+  {id:13, cat:'imei', name:'USA T-Mobile iPhone All Models', time:'1-24h', price:'$88', group:'Network'},
+  {id:14, cat:'imei', name:'USA AT&T iPhone All Models', time:'1-7 days', price:'$4', group:'Network'},
+  {id:15, cat:'imei', name:'UK O2/Tesco iPhone All Models', time:'1-15 days', price:'$2.3', group:'Network'},
+  {id:16, cat:'imei', name:'Japan AU KDDI iPhone All Models', time:'1-24h', price:'$0.64', group:'Network'},
+  // SERVER
+  {id:17, cat:'server', name:'FRPFILE A12+ Bypass Hello Screen XR-17 Pro Max', time:'1-5 min', price:'$3.5', group:'Bypass'},
+  {id:18, cat:'server', name:'HFZ Activator A12+ iPhone & iPads', time:'1-5 min', price:'$5', group:'Bypass'},
+  {id:19, cat:'server', name:'iRemoval Pro A12+ Bypass No Signal', time:'1-5 min', price:'$8', group:'Bypass'},
+  {id:20, cat:'server', name:'FRPFILE Remove Screen Time - iPhone 11/12/13', time:'1-5 min', price:'$13', group:'Screen Time'},
+  {id:21, cat:'server', name:'FRPFILE Remove Screen Time - iPhone 14/15/16', time:'1-5 min', price:'$19', group:'Screen Time'},
+  {id:22, cat:'server', name:'MDM Injection Bypass iPhone/iPad/AppleTV', time:'1-5 min', price:'$2.6', group:'MDM'},
+  {id:23, cat:'server', name:'iAPRO MDM iPhone iPad', time:'1-5 min', price:'$1.5', group:'MDM'},
+  {id:24, cat:'server', name:'MacBook MDM HFZ M1/M2/M3', time:'1-5 min', price:'$6', group:'MacBook'},
+  {id:25, cat:'server', name:'iWatch iCloud Remove S1', time:'1-5 min', price:'$9', group:'iWatch'},
+  {id:26, cat:'server', name:'iWatch iCloud Remove S2', time:'1-5 min', price:'$13', group:'iWatch'},
+  {id:27, cat:'server', name:'iWatch iCloud Remove S3', time:'1-5 min', price:'$18', group:'iWatch'},
+  // REMOTE
+  {id:28, cat:'remote', name:'FRPFILE Premium Tool iPhone/iPad Bypass', time:'1-5 min', price:'$2', group:'Remote Tool'},
+  {id:29, cat:'remote', name:'iRemove Tools A12+ Bypass No Signal', time:'1-5 min', price:'$4.6', group:'Remote Tool'},
+  {id:30, cat:'remote', name:'LPro AIO Passcode All Device MacOS/Windows', time:'1-5 min', price:'$4', group:'Remote Tool'},
+  {id:31, cat:'remote', name:'Router Unlock Code By IMEI', time:'1-20 min', price:'$4.5', group:'Remote Tool'},
+  // iCloud
+  {id:32, cat:'icloud', name:'iCloud Remove UK iPhone 11-13 Series', time:'5-20 days', price:'$150', group:'iCloud'},
+  {id:33, cat:'icloud', name:'iCloud Remove UK iPhone 14 Series', time:'5-20 days', price:'$160', group:'iCloud'},
+  {id:34, cat:'icloud', name:'iCloud Remove UK iPhone 15 Series', time:'5-20 days', price:'$180', group:'iCloud'},
+  {id:35, cat:'icloud', name:'iCloud Remove UK iPhone 16 Series', time:'5-20 days', price:'$190', group:'iCloud'},
+  {id:36, cat:'icloud', name:'FMI OFF Open Menu iPhone/iPad (FrpFile)', time:'1-5 min', price:'$1.9', group:'FMI OFF'},
+  {id:37, cat:'icloud', name:'LU iPAD FMI OFF iPad Air2/6/7/Pro', time:'1-5 min', price:'$8.5', group:'FMI OFF'},
+  // FRP
+  {id:38, cat:'frp', name:'Samsung FRP By IMEI - Low Devices', time:'1-5 min', price:'$13', group:'FRP'},
+  {id:39, cat:'frp', name:'Samsung FRP Android 11/12/13/14 All Models', time:'1-5 min', price:'$17.2', group:'FRP'},
+  {id:40, cat:'frp', name:'Infinix/Tecno/iTel MDM Permanent Unlock', time:'1-24h', price:'$19', group:'FRP'},
+  // CHECK
+  {id:41, cat:'check', name:'Apple Check FMI ON/OFF', time:'1-5 min', price:'$0.03', group:'Check'},
+  {id:42, cat:'check', name:'iCloud Check Lost/Clean', time:'1-5 min', price:'$0.03', group:'Check'},
+  {id:43, cat:'check', name:'Apple Basic Info', time:'1-5 min', price:'$0.07', group:'Check'},
+  {id:44, cat:'check', name:'Apple SimLock + Carrier + FMI', time:'Instant', price:'$0.05', group:'Check'},
+  {id:45, cat:'check', name:'Blacklist Check Worldwide', time:'1-5 min', price:'$0.05', group:'Check'},
+  {id:46, cat:'check', name:'Apple MDM Check', time:'1-5 min', price:'$0.47', group:'Check'},
+  {id:47, cat:'check', name:'Xiaomi Basic Info Check By IMEI', time:'1-5 min', price:'$0.06', group:'Check'},
+  {id:48, cat:'check', name:'Samsung Carrier Check Info', time:'1-5 min', price:'$0.07', group:'Check'},
+];
+
+// ============================================
+// INIT
+// ============================================
+window.onload = function(){
+  allServices = SAMPLE_SERVICES;
+  renderServices();
+  updateBalance();
+  renderOrders();
+  updateProfileUI();
+  applyLang();
+};
+
+// ============================================
+// LANGUAGE
+// ============================================
+const LANG_ORDER = ['uz','ru','en'];
+const LANG_FLAGS = ['🇺🇿 UZ','🇷🇺 RU','🇬🇧 EN'];
 function changeLang(){
-  const order=['uz','ru','en'],flags=['🇺🇿 UZ','🇷🇺 RU','🇬🇧 EN'];
-  let idx=(order.indexOf(currentLang)+1)%3;
-  currentLang=order[idx];
-  document.querySelector('.lang-btn').textContent=flags[idx];
-  document.getElementById('svcTitle').textContent=langs[currentLang].svcTitle;
-  document.getElementById('heroSub').textContent=langs[currentLang].heroSub;
+  let idx = LANG_ORDER.indexOf(currentLang);
+  idx = (idx+1)%3;
+  currentLang = LANG_ORDER[idx];
+  document.querySelector('.lang-btn').textContent = LANG_FLAGS[idx];
+  applyLang();
 }
-function selectService(key,name,hint,price){
-  selectedService={key,name,hint,price};
-  document.querySelectorAll('.svc-card').forEach(c=>c.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-  document.getElementById('mainPage').style.display='none';
-  document.getElementById('orderForm').classList.add('active');
-  document.getElementById('formTitle').textContent=name;
-  document.getElementById('imeiLabel').textContent=hint;
-  document.getElementById('imeiInput').value='';
-  document.getElementById('noteInput').value='';
-  selectedPay=null;
-  document.querySelectorAll('.pay-option').forEach(p=>p.classList.remove('selected'));
+function applyLang(){
+  const t = T[currentLang];
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const k = el.getAttribute('data-key');
+    if(t[k]) el.textContent = t[k];
+  });
+  const si = document.getElementById('searchInput');
+  if(si) si.placeholder = t.search_placeholder || 'Search...';
 }
+
+// ============================================
+// PAGES
+// ============================================
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name)?.classList.add('active');
+  document.getElementById('tab-'+name)?.classList.add('active');
+  if(name==='history') renderOrders();
+  window.scrollTo(0,0);
+}
+
+// ============================================
+// CATEGORIES
+// ============================================
+function selectCat(cat, el){
+  currentCat = cat;
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  filterServices();
+}
+
+// ============================================
+// SERVICES
+// ============================================
+function renderServices(){
+  filterServices();
+}
+function filterServices(){
+  const q = (document.getElementById('searchInput')?.value||'').toLowerCase();
+  const filtered = allServices.filter(s=>{
+    const catMatch = s.cat === currentCat;
+    const searchMatch = !q || s.name.toLowerCase().includes(q) || s.group.toLowerCase().includes(q);
+    return catMatch && searchMatch;
+  });
+  const list = document.getElementById('servicesList');
+  if(!list) return;
+  if(filtered.length===0){
+    list.innerHTML='<div class="svc-loading">Xizmat topilmadi</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(s=>`
+    <div class="svc-item" onclick="openOrder(${s.id})">
+      <div class="svc-info">
+        <div class="svc-name">${s.name}</div>
+        <div class="svc-time">⏱ ${s.time}</div>
+      </div>
+      <div class="svc-price">${s.price}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================
+// ORDER
+// ============================================
+function openOrder(id){
+  const svc = allServices.find(s=>s.id===id);
+  if(!svc) return;
+  selectedService = svc;
+  document.getElementById('formSvcName').textContent = svc.name;
+  document.getElementById('formSvcPrice').textContent = svc.price + ' · ' + svc.time;
+  document.getElementById('imeiInput').value = '';
+  document.getElementById('noteInput').value = '';
+  selectedPay = null;
+  document.querySelectorAll('.pay-card').forEach(p=>p.classList.remove('selected'));
+  document.getElementById('balanceWarn').classList.remove('show');
+  showPage('order');
+}
+
 function selectPay(type){
-  selectedPay=type;
-  document.querySelectorAll('.pay-option').forEach(p=>p.classList.remove('selected'));
+  selectedPay = type;
+  document.querySelectorAll('.pay-card').forEach(p=>p.classList.remove('selected'));
   document.getElementById(type==='click'?'payClick':'payPayme').classList.add('selected');
 }
-function goBack(){
-  document.getElementById('mainPage').style.display='block';
-  document.getElementById('orderForm').classList.remove('active');
-}
+
 function submitOrder(){
-  const imei=document.getElementById('imeiInput').value.trim();
-  if(!imei){alert("IMEI yoki ma'lumot kiriting!");return;}
-  if(!selectedPay){alert("To'lov usulini tanlang!");return;}
-  const orderId='ORD'+Date.now().toString().slice(-8);
-  if(tg){tg.sendData(JSON.stringify({orderId,service:selectedService.key,serviceName:selectedService.name,imei,note:document.getElementById('noteInput').value,payment:selectedPay}));}
-  document.getElementById('orderForm').classList.remove('active');
-  document.getElementById('successPage').classList.add('active');
-  document.getElementById('orderIdDisplay').textContent='🔖 '+orderId;
+  const imei = document.getElementById('imeiInput').value.trim();
+  if(!imei){ showToast('IMEI kiriting!','error'); return; }
+  if(!selectedPay){ showToast("To'lov usulini tanlang!",'error'); return; }
+  if(!selectedService) return;
+
+  const orderId = 'KP'+Date.now().toString().slice(-8);
+  const order = {
+    id: orderId,
+    service: selectedService.name,
+    imei: imei,
+    note: document.getElementById('noteInput').value,
+    payment: selectedPay,
+    price: selectedService.price,
+    status: 'pending',
+    date: new Date().toLocaleDateString('uz-UZ')
+  };
+  orders.unshift(order);
+  localStorage.setItem('kpgsm_orders', JSON.stringify(orders));
+
+  // Telegram ga yuborish
+  if(tg){
+    tg.sendData(JSON.stringify({orderId, service:selectedService.name, imei, payment:selectedPay, price:selectedService.price}));
+  }
+
+  document.getElementById('orderIdDisplay').textContent = '🔖 '+orderId;
+  showPage('success');
 }
-function newOrder(){
-  document.getElementById('successPage').classList.remove('active');
-  document.getElementById('mainPage').style.display='block';
-  selectedService=null;selectedPay=null;
+
+// ============================================
+// ADD FUNDS
+// ============================================
+function selectAmount(amount, el){
+  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  const customInput = document.getElementById('customAmount');
+  if(amount===0){
+    customInput.style.display='block';
+    selectedAmount=0;
+  } else {
+    customInput.style.display='none';
+    selectedAmount=amount;
+  }
+}
+
+function selectPayMethod(method, el){
+  selectedPayMethod = method;
+  document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function processTopup(){
+  const custom = document.getElementById('customAmount').value;
+  const amount = selectedAmount || parseFloat(custom) || 0;
+  if(!amount||amount<1){ showToast("Summa kiriting!",'error'); return; }
+  if(!selectedPayMethod){ showToast("To'lov usulini tanlang!",'error'); return; }
+  
+  // Demo — haqiqiy integratsiya backend orqali
+  showToast(`$${amount} to'lov so'rovi yuborildi!`,'success');
+}
+
+// ============================================
+// ORDER HISTORY
+// ============================================
+function renderOrders(){
+  const list = document.getElementById('ordersList');
+  if(!list) return;
+  const filtered = currentFilter==='all' ? orders : orders.filter(o=>o.status===currentFilter);
+  if(filtered.length===0){
+    list.innerHTML=`
+      <div class="empty-history">
+        <div class="empty-icon">📋</div>
+        <div class="empty-text">Hali buyurtmalar yo'q</div>
+      </div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(o=>`
+    <div class="order-card">
+      <div class="order-top">
+        <div class="order-id">${o.id}</div>
+        <div class="order-status status-${o.status}">${statusLabel(o.status)}</div>
+      </div>
+      <div class="order-svc">${o.service}</div>
+      <div class="order-imei">${o.imei}</div>
+      <div class="order-bottom">
+        <div class="order-date">${o.date}</div>
+        <div class="order-price">${o.price}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function statusLabel(s){
+  const labels = {
+    uz:{pending:'Kutilmoqda',processing:'Jarayonda',completed:'Bajarildi',rejected:'Rad etildi'},
+    ru:{pending:'Ожидание',processing:'В процессе',completed:'Выполнено',rejected:'Отклонено'},
+    en:{pending:'Pending',processing:'Processing',completed:'Completed',rejected:'Rejected'}
+  };
+  return (labels[currentLang]||labels.uz)[s]||s;
+}
+
+function filterOrders(status, el){
+  currentFilter = status;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders();
+}
+
+// ============================================
+// AUTH
+// ============================================
+function switchAuth(type, el){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('form-'+type).classList.add('active');
+}
+
+function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if(!email||!pass){ showToast('Ma\'lumotlarni to\'ldiring!','error'); return; }
+  // Demo login
+  currentUser = {name: email.split('@')[0], email};
+  localStorage.setItem('kpgsm_user', JSON.stringify(currentUser));
+  updateProfileUI();
+  showToast('Xush kelibsiz!','success');
+}
+
+function doRegister(){
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  if(!name||!email||!pass){ showToast("Barcha maydonlarni to'ldiring!",'error'); return; }
+  currentUser = {name, email};
+  localStorage.setItem('kpgsm_user', JSON.stringify(currentUser));
+  updateProfileUI();
+  showToast("Muvaffaqiyatli ro'yxatdan o'tdingiz!",'success');
+}
+
+function logout(){
+  currentUser = null;
+  localStorage.removeItem('kpgsm_user');
+  updateProfileUI();
+  showToast('Chiqildi','success');
+}
+
+function updateProfileUI(){
+  const profileInfo = document.getElementById('profileInfo');
+  const loginCard = document.getElementById('loginCard');
+  if(currentUser){
+    profileInfo.classList.add('show');
+    loginCard.style.display='none';
+    document.getElementById('profileName').textContent = currentUser.name;
+    document.getElementById('profileEmail').textContent = currentUser.email;
+    document.getElementById('profileOrders').textContent = orders.length;
+    document.getElementById('profileBalance').textContent = '$'+userBalance.toFixed(2);
+  } else {
+    profileInfo.classList.remove('show');
+    loginCard.style.display='block';
+  }
+}
+
+function updateBalance(){
+  const b = '$'+userBalance.toFixed(2);
+  document.getElementById('balancePill').textContent = b;
+  document.getElementById('currentBalance').textContent = b;
+}
+
+// ============================================
+// TOAST
+// ============================================
+function showToast(msg, type='success'){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 </script>
 </body>
