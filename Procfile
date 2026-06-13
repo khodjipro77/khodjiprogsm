@@ -1,1 +1,1 @@
-web: python khodjiprogsm_bot.py
+web: gunicorn app:app
